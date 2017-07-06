@@ -11,6 +11,7 @@ weatherApp.controller("cityController",
         $scope.SelectCity = function($index) {
             $scope.selectedCity = $scope.cities[$index];
         }
+        
     });
 weatherApp.controller("daysController", function ($scope) {
     $scope.days = [1, 3, 5];

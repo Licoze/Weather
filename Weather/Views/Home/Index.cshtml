@@ -76,10 +76,11 @@
         var count = Model.Units.Count;
 
         <div class="row">
-            <h3>Forcast for @count days</h3>
+            <h3>Forcast for next @(count-1) days</h3>
             @foreach (var unit in Model.Units.GetRange(1, count-1))
             {
-                <div class="col-lg-3">
+                int width = Convert.ToInt32(12 / (count - 1));
+                <div class="col-lg-@width">
                       
                     <div class="table-responsive">
                         <table class="table">
