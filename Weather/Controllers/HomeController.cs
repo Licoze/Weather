@@ -3,28 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Weather.Services;
+using System.Threading.Tasks;
 
 namespace Weather.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public WeatherService Service { get; }
+
+        public HomeController()
         {
-            return View();
+            Service = new WeatherService();
         }
 
-        public ActionResult About()
+        public async Task<ActionResult> Index()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            var model = await new WeatherService().GetWeatherDaily("Kiev", 1);
+            return View(model);
         }
 
-        public ActionResult Contact()
+        public async Task<ActionResult> Index(string city, int days)
         {
-            ViewBag.Message = "Your contact page.";
+            var model = await new WeatherService().GetWeatherDaily(city, days);
+            return View(model);
 
-            return View();
         }
     }
 }
