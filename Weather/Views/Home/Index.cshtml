@@ -1,6 +1,119 @@
 ﻿@model Weather.Models.WeatherSummary
 
 @{
-     ViewBag.Title = "Weather App";
-     Layout = "~/Views/Shared/_Layout.cshtml";  
+    ViewBag.Title = "Weather App";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="row">
+    <h1>@Model.City</h1>
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+    {
+        <div class="col-lg-offset-2 col-lg-4">
+            <div class="input-group" ng-controller="cityController">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="city in cities" ng-click="SelectCity($index)"><a href="#">{{city}}</a></li>
+                    </ul>
+                </div>
+                @Html.TextBox("city", "{{selectedCity}}", new {@class = "form-control", @ng_model = "selectedCity"})
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="input-group" ng-controller="daysController">
+                <span class="input-group-addon">for</span>
+                <select name="days" ng-model="selectedDays"
+                        ng-options="day for day in days track by day"
+                        class="form-control" id="days"></select>
+                <span class="input-group-addon">days</span>
+            </div>
+
+        </div>
+        <div class="col-lg-2">
+            <div class="input-group-btn">
+                <input type="submit" class="btn btn-success btn-block" value="GO!"/>
+            </div>
+        </div>
+    }
+</div>
+<div class="row">
+    <h3>Today</h3>
+    <div class="col-lg-4 col-lg-offset-4">
+        @{ var first = Model.Units.FirstOrDefault(); }
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <td><img src="@Url.Content("http://openweathermap.org/img/w/" + first.Icon + ".png")" alt="Image"/></td>
+                    <td><b>@first.Time.ToShortDateString()</b></td>
+                </tr>
+                <tr>
+                    <td>Day Temp</td>
+                    <td>@first.DayTemp</td>
+                </tr>
+                <tr>
+                    <td>Night Temp</td>
+                    <td>@first.NightTemp</td>
+                </tr>
+                <tr>
+                    <td>Humidity</td>
+                    <td>@first.Humidity</td>
+                </tr>
+                <tr>
+                    <td>State</td>
+                    <td>@first.State</td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>@first.Description</td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+</div>
+    @if (Model.Units.Count > 1)
+    {
+        var count = Model.Units.Count;
+
+        <div class="row">
+            <h3>Forcast for @count days</h3>
+            @foreach (var unit in Model.Units.GetRange(1, count-1))
+            {
+                <div class="col-lg-3">
+                      
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tr>
+                                <td><img src="@Url.Content("http://openweathermap.org/img/w/" + unit.Icon + ".png")" alt="Image" /></td>
+                                <td><b>@unit.Time.ToShortDateString()</b></td>
+                            </tr>
+                            <tr>
+                                <td>Day Temp</td>
+                                <td>@unit.DayTemp</td>
+                            </tr>
+                            <tr>
+                                <td>Night Temp</td>
+                                <td>@unit.NightTemp</td>
+                            </tr>
+                            <tr>
+                                <td>Humidity</td>
+                                <td>@unit.Humidity</td>
+                            </tr>
+                            <tr>
+                                <td>State</td>
+                                <td>@unit.State</td>
+                            </tr>
+                            <tr>
+                                <td>Description</td>
+                                <td>@unit.Description</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+                    
+            }
+                    
+        </div>
+
+    }

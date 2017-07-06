@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.EnterpriseServices;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -28,7 +29,7 @@ namespace Weather.Services
 
         public async Task<WeatherSummary> GetWeatherDaily(string city, int count=1)
         {
-            string requestStr=String.Format("data/2.5/forecast/daily?q={0}&cnt={1}",city,count);
+            string requestStr=String.Format("data/2.5/forecast/daily?q={0}&cnt={1}&units=metric",city,count);
             string response = await Request(requestStr);
             var obj= JObject.Parse(response);
             var weather = new WeatherSummary();
@@ -42,7 +43,8 @@ namespace Weather.Services
                     Humidity = (int)i["humidity"],
                     State = (string)i["weather"][0]["main"],
                     Description = (string)i["weather"][0]["description"],
-                    Icon = (string)i["weather"][0]["icon"]
+                    Icon = (string)i["weather"][0]["icon"],
+                    Time= DateTimeOffset.FromUnixTimeSeconds((long)i["dt"]).UtcDateTime
                 };
             weather.Units = q.ToList();
             return weather;

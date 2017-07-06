@@ -22,7 +22,7 @@ namespace Weather.Controllers
             var model = await new WeatherService().GetWeatherDaily("Kiev", 1);
             return View(model);
         }
-
+        [HttpPost]
         public async Task<ActionResult> Index(string city, int days)
         {
             var model = await new WeatherService().GetWeatherDaily(city, days);
