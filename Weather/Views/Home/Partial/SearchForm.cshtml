@@ -1,0 +1,30 @@
+﻿@using System.Web.UI.WebControls
+@model Weather.Models.SearchFormViewModel
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    @Html.ValidationSummary()
+    <div class="col-lg-offset-2 col-lg-4">
+        <div class="input-group" ng-controller="cityController">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="city in cities" ng-click="SelectCity($index)"><a href="#">{{city}}</a></li>
+                </ul>
+            </div>
+            @Html.TextBoxFor(m=>m.CityName, "{{selectedCity}}", new { @class = "form-control", @ng_model = "selectedCity" })
+        </div>
+    </div>
+    <div class="col-lg-2">
+        <div class="input-group" ng-controller="daysController">
+            <span class="input-group-addon">for</span>
+            @Html.DropDownListFor(m=>m.ResultCount,new List<SelectListItem>(),new { @class = "form-control",id="days",@ng_options="day for day in days track by day",@ng_model= "selectedDays"})
+            <span class="input-group-addon">days</span>
+        </div>
+
+    </div>
+    <div class="col-lg-2">
+        <div class="input-group-btn">
+            <input type="submit" class="btn btn-success btn-block" value="GO!" />
+        </div>
+    </div>
+}

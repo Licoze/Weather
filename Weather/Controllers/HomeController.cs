@@ -5,29 +5,55 @@ using System.Web;
 using System.Web.Mvc;
 using Weather.Services;
 using System.Threading.Tasks;
+using Weather.Infrastructure;
+using Weather.Models;
 
 namespace Weather.Controllers
 {
     public class HomeController : Controller
     {
-        public WeatherService Service { get; }
+        public IWeatherService Service { get; }
 
-        public HomeController()
+        public HomeController(IWeatherService service)
         {
-            Service = new WeatherService();
+            Service = service;
         }
 
         public async Task<ActionResult> Index()
         {
-            var model = await new WeatherService().GetWeatherDaily("Kiev", 1);
-            return View(model);
+            try
+            {
+                var model = new ComplexViewModel();
+                model.Form = new SearchFormViewModel();
+                model.Form.CityName = "Kiev";
+                model.Form.ResultCount = 1;
+                model.Result = await Service.GetWeatherDaily("Kiev", 1);
+                return View(model);
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
         [HttpPost]
-        public async Task<ActionResult> Index(string city, int days)
+        public async Task<ActionResult> Index(SearchFormViewModel model)
         {
-            var model = await new WeatherService().GetWeatherDaily(city, days);
-            return View(model);
+            try
+            {
+                var resultModel = new ComplexViewModel();
+                resultModel.Form = model;
+                if (ModelState.IsValid)
+                {
+                    resultModel.Result = await Service.GetWeatherDaily(model.CityName, model.ResultCount);
 
+                }
+                resultModel.Result = resultModel.Result ?? await Service.GetWeatherDaily("Kiev", 1);
+                return View(resultModel);
+            }
+            catch
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }

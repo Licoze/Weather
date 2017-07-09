@@ -1,45 +1,16 @@
-﻿@model Weather.Models.WeatherSummary
-
+﻿@model Weather.Models.ComplexViewModel
 @{
     ViewBag.Title = "Weather App";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="row">
-    <h1>@Model.City</h1>
-    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
-    {
-        <div class="col-lg-offset-2 col-lg-4">
-            <div class="input-group" ng-controller="cityController">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="city in cities" ng-click="SelectCity($index)"><a href="#">{{city}}</a></li>
-                    </ul>
-                </div>
-                @Html.TextBox("city", "{{selectedCity}}", new {@class = "form-control", @ng_model = "selectedCity"})
-            </div>
-        </div>
-        <div class="col-lg-2">
-            <div class="input-group" ng-controller="daysController">
-                <span class="input-group-addon">for</span>
-                <select name="days" ng-model="selectedDays"
-                        ng-options="day for day in days track by day"
-                        class="form-control" id="days"></select>
-                <span class="input-group-addon">days</span>
-            </div>
-
-        </div>
-        <div class="col-lg-2">
-            <div class="input-group-btn">
-                <input type="submit" class="btn btn-success btn-block" value="GO!"/>
-            </div>
-        </div>
-    }
+    <h1>@Model.Result.City</h1>
+    @{ Html.RenderPartial("Partial/SearchForm", Model.Form);}
 </div>
 <div class="row">
     <h3>Today</h3>
     <div class="col-lg-4 col-lg-offset-4">
-        @{ var first = Model.Units.FirstOrDefault(); }
+        @{ var first = Model.Result.Units.FirstOrDefault(); }
         <div class="table-responsive">
             <table class="table">
                 <tr>
@@ -71,13 +42,13 @@
         </div>
     </div>
 </div>
-    @if (Model.Units.Count > 1)
+    @if (Model.Result.Units.Count > 1)
     {
-        var count = Model.Units.Count;
+        var count = Model.Result.Units.Count;
 
         <div class="row">
             <h3>Forcast for next @(count-1) days</h3>
-            @foreach (var unit in Model.Units.GetRange(1, count-1))
+            @foreach (var unit in Model.Result.Units.GetRange(1, count-1))
             {
                 int width = Convert.ToInt32(12 / (count - 1));
                 <div class="col-lg-@width">
