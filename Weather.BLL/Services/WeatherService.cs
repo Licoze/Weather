@@ -1,43 +1,47 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.EnterpriseServices;
+using System.Configuration;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Web;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Configuration;
-using System.Linq.Expressions;
-using Weather.Models;
-using Newtonsoft.Json;
+using AutoMapper;
+using Weather.DAL.Models;
 using Newtonsoft.Json.Linq;
-using Weather.Infrastructure;
+using Weather.BLL.DTO;
+using Weather.BLL.Infrastructure;
+using Weather.DAL.Infrastructure;
 
-namespace Weather.Services
+namespace Weather.BLL.Services
 {
     public class WeatherService: IWeatherService
     {
         private readonly string _url;
         private readonly string _apiKey;
-        public WeatherService()
+        private readonly IMapper _mapper;
+        private readonly WeatherDb _db;
+        public WeatherService(WeatherDb db, IMapper mapper)
         {
             _url = "http://api.openweathermap.org/";
             _apiKey = ConfigurationManager.AppSettings["apiKey"];
-
+            _db = db;
+            _mapper = mapper;
         }
 
-        public async Task<WeatherSummary> GetWeatherDaily(string city, int count=1)
+        public async Task<WeatherSummaryDTO> GetWeatherDaily(string cityname, int count=1)
         {
-            string requestStr=String.Format("data/2.5/forecast/daily?q={0}&cnt={1}&units=metric",city,count);
+            string requestStr=String.Format("data/2.5/forecast/daily?q={0}&cnt={1}&units=metric",cityname,count);
             string response = await Request(requestStr);
             if (response == string.Empty)
                 return null;
             var obj= JObject.Parse(response);
-            var weather = new WeatherSummary();
-            
-            weather.City = (string)obj["city"]["name"];
+            var weather = new WeatherSummary();           
+            string cityName = (string)obj["city"]["name"];
+            var city = _db.Cities.First(c => c.Name == cityName) 
+                        ?? new City()
+                       {
+                           Name=cityName
+                       };
+            weather.City = city;
             var q = from i in obj["list"]
                 select new WeatherUnit()
                 {
@@ -50,7 +54,9 @@ namespace Weather.Services
                     Time= DateTimeOffset.FromUnixTimeSeconds((long)i["dt"]).UtcDateTime
                 };
             weather.Units = q.ToList();
-            return weather;
+            _db.Summaries.Add(weather);
+            await _db.SaveChangesAsync();
+            return _mapper.Map<WeatherSummaryDTO>(weather);
         }
 
         private async Task<string> Request(string requestStr)

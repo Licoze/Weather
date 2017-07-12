@@ -1,4 +1,5 @@
-﻿@model Weather.Models.ComplexViewModel
+﻿@using Weather.Models
+@model Weather.Models.ComplexViewModel
 @{
     ViewBag.Title = "Weather App";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -48,7 +49,7 @@
 
         <div class="row">
             <h3>Forcast for next @(count-1) days</h3>
-            @foreach (var unit in Model.Result.Units.GetRange(1, count-1))
+            @foreach (var unit in (Model.Result.Units as List<WeatherUnit>).GetRange(1, count-1))
             {
                 int width = Convert.ToInt32(12 / (count - 1));
                 <div class="col-lg-@width">

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Weather.Models;
+using Weather.BLL.DTO;
 
-namespace Weather.Infrastructure
+namespace Weather.BLL.Infrastructure
 {
     public interface IWeatherService
     {
-        Task<WeatherSummary> GetWeatherDaily(string city, int count = 1);
+        Task<WeatherSummaryDTO> GetWeatherDaily(string city, int count = 1);
     }
 }
