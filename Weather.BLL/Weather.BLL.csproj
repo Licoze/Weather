@@ -73,11 +73,11 @@
   <ItemGroup>
     <Compile Include="DTO\CityDTO.cs" />
     <Compile Include="DTO\SearchHistoryDTO.cs" />
-    <Compile Include="DTO\WeatherSummaryDTO.cs" />
+    <Compile Include="DTO\ForecastDTO.cs" />
     <Compile Include="DTO\WeatherUnitDTO.cs" />
     <Compile Include="Infrastructure\BLLMappingProfile.cs" />
-    <Compile Include="Infrastructure\BLLModule.cs" />
-    <Compile Include="Infrastructure\IServiceFactory.cs" />
+    <Compile Include="Infrastructure\DatabaseModule.cs" />
+    <Compile Include="Interfaces\IServiceFactory.cs" />
     <Compile Include="Interfaces\IHistoryService.cs" />
     <Compile Include="Interfaces\IWeatherService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

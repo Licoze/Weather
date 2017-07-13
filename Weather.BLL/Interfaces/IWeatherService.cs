@@ -9,6 +9,6 @@ namespace Weather.BLL.Infrastructure
 {
     public interface IWeatherService
     {
-        Task<WeatherSummaryDTO> GetWeatherDaily(string city, int count = 1);
+        Task<ForecastDTO> GetWeatherDaily(string city, int count = 1);
     }
 }

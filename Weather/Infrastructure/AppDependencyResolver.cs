@@ -4,8 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AutoMapper;
 using Ninject;
-using Weather.Services;
+using Ninject.Extensions.Factory;
+using Weather.BLL.Infrastructure;
+using Weather.BLL.Interfaces;
+using Weather.BLL.Services;
 
 namespace Weather.Infrastructure
 {
@@ -27,7 +31,13 @@ namespace Weather.Infrastructure
         }
         private void AddBindings()
         {
-            kernel.Bind<IWeatherService>().To<WeatherService>();
+            var config = new MapperConfiguration(cfg => {
+                cfg.AddProfile<PLMappingProfile>();
+            });
+            
+            var mapper = config.CreateMapper();
+            kernel.Bind<IServiceFactory>().ToFactory();
+            kernel.Bind<IMapper>().ToConstant(mapper);
         }
     }
 }

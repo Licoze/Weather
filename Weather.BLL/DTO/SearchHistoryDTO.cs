@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace Weather.BLL.DTO
 {
-    class SearchHistoryDTO
+    public class SearchHistoryDTO
     {
         public int Id { get; set; }
-        public List<WeatherSummaryDTO> Results { get; set; }
-        public List<CityDTO> CitiesPreset { get; set; }
+        public List<ForecastDTO> Results { get; set; }
     }
 }

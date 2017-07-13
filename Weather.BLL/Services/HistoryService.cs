@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -18,39 +19,36 @@ namespace Weather.BLL.Services
         public HistoryService(WeatherDb db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
-        public async Task AddCityToPreset(int userId, CityDTO city)
-        {
-            var cityEnity = _mapper.Map<City>(city);
-            _db.Cities.Add(cityEnity);
-            _db.SearchHistories.Find(userId).CitiesPreset.Add(cityEnity);
-            await _db.SaveChangesAsync();
 
-        }
-
-        public List<CityDTO> GetCityPreset(int userId)
+        public async Task<int> SaveToHistory( ForecastDTO forecastDto,int userId= 0)
         {
+            var forecast = _mapper.Map<Forecast>(forecastDto);
             var history = _db.SearchHistories.Find(userId);
-            if (history != null)
+            if(history==null)
+                         history= new SearchHistory();
+            history.Results.Add(forecast);
+            if (history.Id == 0)
             {
-                return _mapper.Map<List<CityDTO>>(history.CitiesPreset);
+                _db.SearchHistories.Add(history);
             }
             else
             {
-          
+                _db.SearchHistories.Attach(history);
             }
-        }
-        public async Task SaveToHistory(int userId, WeatherSummaryDTO summary)
-        {
-            var summaryEntity = _mapper.Map<WeatherSummary>(summary);
-            var history = _db.SearchHistories.Find(userId)??new SearchHistory();
-            var city = _mapper.Map<CityDTO>(summary.City);
-            await AddCityToPreset(userId, city);
-            history.Results.Add(summaryEntity);
-            _db.SearchHistories.Add(history);
             await _db.SaveChangesAsync();
+            return history.Id;
+        }
 
+        public async Task<List<SearchHistoryDTO>> GetHistory()
+        {
+            _db.Summaries.Load();
+            _db.Cities.Load();
+            _db.WeatherUnits.Load();
+            var entities = _db.SearchHistories.ToList();
+            return _mapper.Map<List<SearchHistoryDTO>>(entities);
         }
     }
 }

@@ -5,15 +5,16 @@ using System.Web;
 
 namespace Weather.DAL.Models
 {
-    public class WeatherSummary
+    public class Forecast
     {
         public int Id { get; set; }
         public City City { get; set; }
         public virtual IList<WeatherUnit> Units { get; set; }
 
-        public WeatherSummary()
+        public Forecast()
         {
-            Units=new List<WeatherUnit>();
+            Units = new List<WeatherUnit>();
+
         }
 
     }

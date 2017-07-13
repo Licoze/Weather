@@ -18,45 +18,48 @@ namespace Weather.BLL.Services
         private readonly string _url;
         private readonly string _apiKey;
         private readonly IMapper _mapper;
-        private readonly WeatherDb _db;
-        public WeatherService(WeatherDb db, IMapper mapper)
+        public WeatherService(IMapper mapper)
         {
             _url = "http://api.openweathermap.org/";
             _apiKey = ConfigurationManager.AppSettings["apiKey"];
-            _db = db;
             _mapper = mapper;
         }
 
-        public async Task<WeatherSummaryDTO> GetWeatherDaily(string cityname, int count=1)
+        public async Task<ForecastDTO> GetWeatherDaily(string cityname, int count=1)
         {
-            string requestStr=String.Format("data/2.5/forecast/daily?q={0}&cnt={1}&units=metric",cityname,count);
-            string response = await Request(requestStr);
-            if (response == string.Empty)
-                return null;
-            var obj= JObject.Parse(response);
-            var weather = new WeatherSummary();           
-            string cityName = (string)obj["city"]["name"];
-            var city = _db.Cities.First(c => c.Name == cityName) 
-                        ?? new City()
-                       {
-                           Name=cityName
-                       };
-            weather.City = city;
-            var q = from i in obj["list"]
-                select new WeatherUnit()
+            try
+            {
+                string requestStr = String.Format("data/2.5/forecast/daily?q={0}&cnt={1}&units=metric", cityname,
+                    count);
+                string response = await Request(requestStr);
+                if (response == string.Empty)
+                    return null;
+                var obj = JObject.Parse(response);
+                var weather = new Forecast();
+                string cityName = (string) obj["city"]["name"];
+                var city = new City()
                 {
-                    DayTemp = (double)i["temp"]["day"],
-                    NightTemp = (double)i["temp"]["night"],
-                    Humidity = (int)i["humidity"],
-                    State = (string)i["weather"][0]["main"],
-                    Description = (string)i["weather"][0]["description"],
-                    Icon = (string)i["weather"][0]["icon"],
-                    Time= DateTimeOffset.FromUnixTimeSeconds((long)i["dt"]).UtcDateTime
+                    Name = cityName
                 };
-            weather.Units = q.ToList();
-            _db.Summaries.Add(weather);
-            await _db.SaveChangesAsync();
-            return _mapper.Map<WeatherSummaryDTO>(weather);
+                weather.City = city;
+                var q = from i in obj["list"]
+                    select new WeatherUnit()
+                    {
+                        DayTemp = (double) i["temp"]["day"],
+                        NightTemp = (double) i["temp"]["night"],
+                        Humidity = (int) i["humidity"],
+                        State = (string) i["weather"][0]["main"],
+                        Description = (string) i["weather"][0]["description"],
+                        Icon = (string) i["weather"][0]["icon"],
+                        Time = DateTimeOffset.FromUnixTimeSeconds((long) i["dt"]).UtcDateTime
+                    };
+                weather.Units = q.ToList();
+                return _mapper.Map<ForecastDTO>(weather);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         private async Task<string> Request(string requestStr)

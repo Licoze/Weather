@@ -14,7 +14,7 @@ namespace Weather.BLL.Infrastructure
         public BLLMappingProfile()
         {
             CreateMap<WeatherUnit, WeatherUnitDTO>().ReverseMap();
-            CreateMap<WeatherSummary, WeatherSummaryDTO>().ReverseMap();
+            CreateMap<Forecast, ForecastDTO>().ReverseMap();
             CreateMap<SearchHistory, SearchHistoryDTO>().ReverseMap();
             CreateMap<City, CityDTO>().ReverseMap();
         }

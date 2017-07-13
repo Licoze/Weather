@@ -12,7 +12,7 @@ namespace Weather.Models
     public class ComplexViewModel
     {
         public SearchFormViewModel Form { get; set; }
-        public WeatherSummary Result { get; set; }
+        public ForecastViewModel Result { get; set; }
 
     }
 }

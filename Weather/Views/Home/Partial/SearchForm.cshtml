@@ -2,20 +2,24 @@
 @model Weather.Models.SearchFormViewModel
 @using (Html.BeginForm("Index", "Home", FormMethod.Post))
 {
+    <div ng-controller="searchController">
     @Html.ValidationSummary()
     <div class="col-lg-offset-2 col-lg-4">
-        <div class="input-group" ng-controller="cityController">
+        <div class="input-group" >
             <div class="input-group-btn">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li ng-repeat="city in cities" ng-click="SelectCity($index)"><a href="#">{{city}}</a></li>
+                <ul class="dropdown-menu pull-right">
+                    <li ng-repeat="city in cities"><span class="input-group-btn deletebtn">
+                            <button class="close" type="button" ng-click="DeleteCity($index)"><span aria-hidden="true">&times;</span></button>
+                        </span><a href="#"  ng-click="SelectCity($index)">{{city}}</a>
+                    </li>
                 </ul>
             </div>
             @Html.TextBoxFor(m=>m.CityName, "{{selectedCity}}", new { @class = "form-control", @ng_model = "selectedCity" })
         </div>
     </div>
     <div class="col-lg-2">
-        <div class="input-group" ng-controller="daysController">
+        <div class="input-group" >
             <span class="input-group-addon">for</span>
             @Html.DropDownListFor(m=>m.ResultCount,new List<SelectListItem>(),new { @class = "form-control",id="days",@ng_options="day for day in days track by day",@ng_model= "selectedDays"})
             <span class="input-group-addon">days</span>
@@ -24,7 +28,9 @@
     </div>
     <div class="col-lg-2">
         <div class="input-group-btn">
-            <input type="submit" class="btn btn-success btn-block" value="GO!" />
+            
+            <button type="button" class="btn btn-success" ng-click="SubmitSearch()">GO!</button>
         </div>
+    </div>
     </div>
 }

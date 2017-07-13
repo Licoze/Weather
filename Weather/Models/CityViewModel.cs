@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace Weather.DAL.Models
+namespace Weather.Models
 {
-    public class City
+    public class CityViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

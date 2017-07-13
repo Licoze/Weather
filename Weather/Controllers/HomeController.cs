@@ -3,8 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Weather.Services;
+
 using System.Threading.Tasks;
+using System.Web.Services.Description;
+using AutoMapper;
+using Microsoft.Ajax.Utilities;
+using Weather.BLL.DTO;
+using Weather.BLL.Infrastructure;
+using Weather.BLL.Interfaces;
 using Weather.Infrastructure;
 using Weather.Models;
 
@@ -12,11 +18,15 @@ namespace Weather.Controllers
 {
     public class HomeController : Controller
     {
-        public IWeatherService Service { get; }
-
-        public HomeController(IWeatherService service)
+        private IMapper _mapper;
+        public IWeatherService WeatherService { get; }
+        public IHistoryService HistoryService { get; }      
+        public HomeController(IServiceFactory service, IMapper mapper)
         {
-            Service = service;
+
+            _mapper = mapper;
+            WeatherService = service.CreateWeatherService();
+            HistoryService = service.CreateHistoryService();
         }
 
         public async Task<ActionResult> Index()
@@ -27,13 +37,35 @@ namespace Weather.Controllers
                 model.Form = new SearchFormViewModel();
                 model.Form.CityName = "Kiev";
                 model.Form.ResultCount = 1;
-                model.Result = await Service.GetWeatherDaily("Kiev", 1);
+                var forecastDTO = await WeatherService.GetWeatherDaily("Kiev", 1);
+                var forecast=_mapper.Map<ForecastViewModel>(forecastDTO);
+                model.Result = forecast;
+                var cookie = Request.Cookies["Id"];
+                if (cookie != null)
+                {
+                    await HistoryService.SaveToHistory(forecastDTO, Convert.ToInt32(cookie.Value));
+                }
+                else
+                {
+                    var id = await HistoryService.SaveToHistory(forecastDTO);
+                    cookie = new HttpCookie("Id");
+                    cookie.Value = id.ToString();
+                    Response.SetCookie(cookie);
+                }
+                
                 return View(model);
             }
             catch
             {
                 return View("Error");
             }
+        }
+
+        public async Task<ActionResult> SearchHistory()
+        {
+            var Dto =await HistoryService.GetHistory();
+            var history = _mapper.Map<List<SearchHistoryViewModel>>(Dto);
+            return View(history);
         }
         [HttpPost]
         public async Task<ActionResult> Index(SearchFormViewModel model)
@@ -42,13 +74,38 @@ namespace Weather.Controllers
             {
                 var resultModel = new ComplexViewModel();
                 resultModel.Form = model;
+                ForecastDTO forecastDTO=null;
                 if (ModelState.IsValid)
                 {
-                    resultModel.Result = await Service.GetWeatherDaily(model.CityName, model.ResultCount);
+                    forecastDTO = await WeatherService.GetWeatherDaily(model.CityName, model.ResultCount);
+                    
 
                 }
-                resultModel.Result = resultModel.Result ?? await Service.GetWeatherDaily("Kiev", 1);
-                return View(resultModel);
+               
+                if (forecastDTO != null)
+                {
+                    var forecast = _mapper.Map<ForecastViewModel>(forecastDTO);
+                    resultModel.Result = forecast;
+                    var cookie = Request.Cookies["Id"];
+                    if (cookie != null)
+                    {
+                        await HistoryService.SaveToHistory(forecastDTO, Convert.ToInt32(cookie.Value));
+                    }
+                    else
+                    {
+                        var id = await HistoryService.SaveToHistory(forecastDTO);
+                        cookie = new HttpCookie("Id");
+                        cookie.Value = id.ToString();
+                        Response.SetCookie(cookie);
+                    }
+                    return View(resultModel);
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
+                
+                
             }
             catch
             {

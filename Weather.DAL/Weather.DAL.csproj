@@ -52,7 +52,7 @@
   <ItemGroup>
     <Compile Include="Entities\City.cs" />
     <Compile Include="Entities\SearchHistory.cs" />
-    <Compile Include="Entities\WeatherSummary.cs" />
+    <Compile Include="Entities\Forecast.cs" />
     <Compile Include="Entities\WeatherUnit.cs" />
     <Compile Include="Infrastructure\WeatherDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

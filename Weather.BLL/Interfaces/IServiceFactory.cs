@@ -9,10 +9,10 @@ using Weather.DAL.Infrastructure;
 
 namespace Weather.BLL.Infrastructure
 {
-    interface IServiceFactory
+    public interface IServiceFactory
     {
-        IHistoryService CreateHistoryService(WeatherDb db, IMapper mapper);
-        IWeatherService CreateWeatherService(WeatherDb db, IMapper mapper);
-
+        IHistoryService CreateHistoryService();
+        IWeatherService CreateWeatherService();
+        
     }
 }
