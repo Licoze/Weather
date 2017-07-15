@@ -8,7 +8,7 @@ namespace Weather.DAL.Models
     public class Forecast
     {
         public int Id { get; set; }
-        public City City { get; set; }
+        public virtual City City { get; set; }
         public virtual IList<WeatherUnit> Units { get; set; }
 
         public Forecast()

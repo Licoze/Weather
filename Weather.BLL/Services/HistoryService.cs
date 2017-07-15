@@ -26,9 +26,7 @@ namespace Weather.BLL.Services
         public async Task<int> SaveToHistory( ForecastDTO forecastDto,int userId= 0)
         {
             var forecast = _mapper.Map<Forecast>(forecastDto);
-            var history = _db.SearchHistories.Find(userId);
-            if(history==null)
-                         history= new SearchHistory();
+            var history = _db.SearchHistories.Find(userId) ?? new SearchHistory();
             history.Results.Add(forecast);
             if (history.Id == 0)
             {
@@ -44,9 +42,6 @@ namespace Weather.BLL.Services
 
         public async Task<List<SearchHistoryDTO>> GetHistory()
         {
-            _db.Summaries.Load();
-            _db.Cities.Load();
-            _db.WeatherUnits.Load();
             var entities = _db.SearchHistories.ToList();
             return _mapper.Map<List<SearchHistoryDTO>>(entities);
         }
