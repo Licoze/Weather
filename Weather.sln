@@ -8,10 +8,21 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather.DAL", "Weather.DAL\Weather.DAL.csproj", "{A7141AC2-40BD-4EB8-95F2-78B1F14B5ABD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather.BLL", "Weather.BLL\Weather.BLL.csproj", "{47C9D4F4-DE38-4A16-9EB9-6C5141711993}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A7141AC2-40BD-4EB8-95F2-78B1F14B5ABD} = {A7141AC2-40BD-4EB8-95F2-78B1F14B5ABD}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather.Tests", "Weather.Tests\Weather.Tests.csproj", "{A998592C-21B0-4695-A8DD-065213F41211}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A7141AC2-40BD-4EB8-95F2-78B1F14B5ABD} = {A7141AC2-40BD-4EB8-95F2-78B1F14B5ABD}
+		{47C9D4F4-DE38-4A16-9EB9-6C5141711993} = {47C9D4F4-DE38-4A16-9EB9-6C5141711993}
+		{E51C40F7-9DC4-4147-BC42-A708BC747B2A} = {E51C40F7-9DC4-4147-BC42-A708BC747B2A}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuring", "Configuring\Configuring.csproj", "{E158B3F0-EBF1-47B9-B925-D701C3A71C5D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A7141AC2-40BD-4EB8-95F2-78B1F14B5ABD} = {A7141AC2-40BD-4EB8-95F2-78B1F14B5ABD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
