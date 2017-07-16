@@ -21,6 +21,7 @@ namespace Weather.Tests.BLL.Tests
         {
             var kernel = new StandardKernel(new NinjectTestModule());
             _mapper = kernel.Get<IMapper>();
+            _service=new WeatherService(_mapper);
 
         }
         [Test]
