@@ -40,7 +40,7 @@ namespace Weather.Controllers
                 var forecastDTO = await WeatherService.GetWeatherDaily("Kiev", 1);
                 var forecast=_mapper.Map<ForecastViewModel>(forecastDTO);
                 model.Result = forecast;
-                var cookie = Request.Cookies["Id"];
+                var cookie = Request?.Cookies["Id"];
                 if (cookie != null)
                 {
                     await HistoryService.SaveToHistory(forecastDTO, Convert.ToInt32(cookie.Value));
@@ -50,7 +50,7 @@ namespace Weather.Controllers
                     var id = await HistoryService.SaveToHistory(forecastDTO);
                     cookie = new HttpCookie("Id");
                     cookie.Value = id.ToString();
-                    Response.SetCookie(cookie);
+                    Response?.SetCookie(cookie);
                 }
                 
                 return View(model);
@@ -63,7 +63,7 @@ namespace Weather.Controllers
 
         public async Task<ActionResult> SearchHistory()
         {
-            var Dto =await HistoryService.GetHistory();
+            var Dto = HistoryService.GetHistory();
             var history = _mapper.Map<List<SearchHistoryViewModel>>(Dto);
             return View(history);
         }
@@ -79,14 +79,13 @@ namespace Weather.Controllers
                 {
                     forecastDTO = await WeatherService.GetWeatherDaily(model.CityName, model.ResultCount);
                     
-
                 }
                
                 if (forecastDTO != null)
                 {
                     var forecast = _mapper.Map<ForecastViewModel>(forecastDTO);
                     resultModel.Result = forecast;
-                    var cookie = Request.Cookies["Id"];
+                    var cookie = Request?.Cookies["Id"];
                     if (cookie != null)
                     {
                         await HistoryService.SaveToHistory(forecastDTO, Convert.ToInt32(cookie.Value));
@@ -96,7 +95,7 @@ namespace Weather.Controllers
                         var id = await HistoryService.SaveToHistory(forecastDTO);
                         cookie = new HttpCookie("Id");
                         cookie.Value = id.ToString();
-                        Response.SetCookie(cookie);
+                        Response?.SetCookie(cookie);
                     }
                     return View(resultModel);
                 }

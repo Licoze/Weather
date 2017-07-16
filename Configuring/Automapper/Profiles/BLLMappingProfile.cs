@@ -7,7 +7,7 @@ using AutoMapper;
 using Weather.BLL.DTO;
 using Weather.DAL.Models;
 
-namespace Weather.BLL.Infrastructure
+namespace Configuring.Automapper.Profiles
 {
     public class BLLMappingProfile:Profile
     {

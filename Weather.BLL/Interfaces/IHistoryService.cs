@@ -10,7 +10,7 @@ namespace Weather.BLL.Interfaces
     public interface IHistoryService
     {
         Task<int> SaveToHistory( ForecastDTO forecastDto,int userId=0);
-        Task<List<SearchHistoryDTO>> GetHistory();
+        List<SearchHistoryDTO> GetHistory();
 
     }
 }

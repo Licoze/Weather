@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
+using Configuring.Automapper.Profiles;
 using Ninject;
 using Ninject.Extensions.Factory;
 using Weather.BLL.Infrastructure;
@@ -31,8 +32,10 @@ namespace Weather.Infrastructure
         }
         private void AddBindings()
         {
-            var config = new MapperConfiguration(cfg => {
+            var config = new MapperConfiguration(cfg =>
+            {
                 cfg.AddProfile<PLMappingProfile>();
+                cfg.AddProfile<BLLMappingProfile>();
             });
             
             var mapper = config.CreateMapper();
