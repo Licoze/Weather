@@ -63,7 +63,7 @@ namespace Weather.Controllers
 
         public async Task<ActionResult> SearchHistory()
         {
-            var Dto =await HistoryService.GetHistory();
+            var Dto = HistoryService.GetHistory();
             var history = _mapper.Map<List<SearchHistoryViewModel>>(Dto);
             return View(history);
         }

@@ -1,5 +1,4 @@
 using System.Web.Mvc;
-
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(Weather.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(Weather.App_Start.NinjectWebCommon), "Stop")]
 
@@ -9,10 +8,10 @@ namespace Weather.App_Start
     using System.Web;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-
+    using Configuring.Ninject.Modules;
     using Ninject;
     using Ninject.Web.Common;
-    using BLL.Infrastructure;
+    using Infrastructure;
 
     public static class NinjectWebCommon 
     {
@@ -42,7 +41,7 @@ namespace Weather.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new DatabaseModule("WeatherDB"));
+            var kernel = new StandardKernel(new DALModule("WeatherDB"),new BLLModule());
             try
             {
                 kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
@@ -64,7 +63,7 @@ namespace Weather.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            DependencyResolver.SetResolver(new Infrastructure.AppDependencyResolver(kernel));
+            DependencyResolver.SetResolver(new AppDependencyResolver(kernel));
         }        
     }
 }

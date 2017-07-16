@@ -304,6 +304,10 @@
     <Content Include="Scripts\jquery-3.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Configuring\Configuring.csproj">
+      <Project>{e158b3f0-ebf1-47b9-b925-d701c3a71c5d}</Project>
+      <Name>Configuring</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Weather.BLL\Weather.BLL.csproj">
       <Project>{47c9d4f4-de38-4a16-9eb9-6c5141711993}</Project>
       <Name>Weather.BLL</Name>
