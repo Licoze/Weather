@@ -49,19 +49,14 @@ namespace Weather.Tests.PL.Tests.Controllers
         public void IndexWithParamTest()
         {
             var controller = new HomeController(_factory, _mapper);
-            var cookie = new HttpCookie("Id")
-            {
-                Value = 0.ToString()
-            };
-            controller.HttpContext.Request.Cookies.Add(cookie);
             var form=new SearchFormViewModel()
             {
                 CityName = "Lviv",
                 ResultCount = 3
             };
             
-            var result = controller.Index().Result as ViewResult;
-            var actualCount = (result.Model as ForecastViewModel).Units.Count;
+            var result = controller.Index(form).Result as ViewResult;
+            var actualCount = (result.Model as ComplexViewModel).Result.Units.Count;
             Assert.AreEqual(actualCount,3);
         }
     }
