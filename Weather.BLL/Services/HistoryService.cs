@@ -24,7 +24,7 @@ namespace Weather.BLL.Services
         }
 
 
-        public async Task<int> SaveToHistory( ForecastDTO forecastDto,int userId= 0)
+        public async Task<int> SaveToHistory(ForecastDTO forecastDto,int userId= 0)
         {
             var forecast = _mapper.Map<Forecast>(forecastDto);
             var history = _uow.Histories.Get(userId) ?? new SearchHistory();

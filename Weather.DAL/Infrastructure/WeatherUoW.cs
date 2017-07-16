@@ -22,13 +22,42 @@ namespace Weather.DAL.Infrastructure
         {
             _db = db;
         }
-        public IRepository<City> Cities => _cities ?? new Repository<City>(_db);
 
-        public IRepository<Forecast> Forecasts => _forecasts ?? new Repository<Forecast>(_db);
+        public IRepository<City> Cities
+        {
+            get
+            {
+                _cities=_cities ?? new Repository<City>(_db);
+                return _cities;
+            }
+        }
 
-        public IRepository<SearchHistory> Histories => _histories ?? new Repository<SearchHistory>(_db);
+        public IRepository<Forecast> Forecasts
+        {
+            get
+            {
+                _forecasts =_forecasts ?? new Repository<Forecast>(_db);
+                return _forecasts;
+            }
+        }
 
-        public IRepository<WeatherUnit> WeatherUnits => _weatherUnits ?? new Repository<WeatherUnit>(_db);
+        public IRepository<SearchHistory> Histories
+        {
+            get
+            {
+                _histories=_histories ?? new Repository<SearchHistory>(_db);
+                return _histories;
+            }
+        }
+
+        public IRepository<WeatherUnit> WeatherUnits
+        {
+            get
+            {
+                _weatherUnits=_weatherUnits ?? new Repository<WeatherUnit>(_db);
+                return _weatherUnits;
+            }
+        }
 
         public void Dispose()
         {
