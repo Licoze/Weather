@@ -103,6 +103,7 @@
     <Compile Include="BLL.Tests\WeatherServiceTests.cs" />
     <Compile Include="Config\MapperProfile.cs" />
     <Compile Include="Config\NinjectTestModule.cs" />
+    <Compile Include="DAL.Tests\Repositories\CityRepositoryTests.cs" />
     <Compile Include="Mock\MockRepository.cs" />
     <Compile Include="Mock\MockUoW.cs" />
     <Compile Include="PL.Tests\Controllers\HomeControllerTests.cs" />

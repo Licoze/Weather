@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Ninject;
 using NUnit.Framework;
 using Weather.BLL.Infrastructure;
 using Weather.BLL.Services;
@@ -18,13 +19,9 @@ namespace Weather.Tests.BLL.Tests
         [OneTimeSetUp]
         public void Setup()
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<MapperProfile>();
-            });
-            _mapper = config.CreateMapper();
-            _service=new WeatherService(_mapper);
-            
+            var kernel = new StandardKernel(new NinjectTestModule());
+            _mapper = kernel.Get<IMapper>();
+
         }
         [Test]
         public void GetWeatherDailyTests()
