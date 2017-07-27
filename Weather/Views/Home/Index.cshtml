@@ -10,7 +10,7 @@
 </div>
 <div class="row">
     <h3>Today</h3>
-    <div class="col-lg-4 col-lg-offset-4">
+    <div class="col-lg-4 col-lg-offset-4 forecast-item">
         @{ var first = Model.Result.Units.FirstOrDefault(); }
         <div class="table-responsive">
             <table class="table">
@@ -47,46 +47,46 @@
     {
         var count = Model.Result.Units.Count;
 
-        <div class="row">
-            <h3>Forcast for next @(count-1) days</h3>
-            @foreach (var unit in Model.Result.Units.GetRange(1, count-1))
-            {
-                int width = Convert.ToInt32(12 / (count - 1));
-                <div class="col-lg-@width">
-                      
-                    <div class="table-responsive">
-                        <table class="table">
-                            <tr>
-                                <td><img src="@Url.Content("http://openweathermap.org/img/w/" + unit.Icon + ".png")" alt="Image" /></td>
-                                <td><b>@unit.Time.ToShortDateString()</b></td>
-                            </tr>
-                            <tr>
-                                <td>Day Temp</td>
-                                <td>@unit.DayTemp</td>
-                            </tr>
-                            <tr>
-                                <td>Night Temp</td>
-                                <td>@unit.NightTemp</td>
-                            </tr>
-                            <tr>
-                                <td>Humidity</td>
-                                <td>@unit.Humidity</td>
-                            </tr>
-                            <tr>
-                                <td>State</td>
-                                <td>@unit.State</td>
-                            </tr>
-                            <tr>
-                                <td>Description</td>
-                                <td>@unit.Description</td>
-                            </tr>
+        <div>
+            <h3>Forcast for next @(count - 1) days</h3>
+            <div class="flex-container">
+                @foreach (var unit in Model.Result.Units.GetRange(1, count - 1))
+                {
+                    <div class="forecast-item">
 
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <td><img src="@Url.Content("http://openweathermap.org/img/w/" + unit.Icon + ".png")" alt="Image"/></td>
+                                    <td><b>@unit.Time.ToShortDateString()</b></td>
+                                </tr>
+                                <tr>
+                                    <td>Day Temp</td>
+                                    <td>@unit.DayTemp</td>
+                                </tr>
+                                <tr>
+                                    <td>Night Temp</td>
+                                    <td>@unit.NightTemp</td>
+                                </tr>
+                                <tr>
+                                    <td>Humidity</td>
+                                    <td>@unit.Humidity</td>
+                                </tr>
+                                <tr>
+                                    <td>State</td>
+                                    <td>@unit.State</td>
+                                </tr>
+                                <tr>
+                                    <td>Description</td>
+                                    <td>@unit.Description</td>
+                                </tr>
+
+                            </table>
+                        </div>
                     </div>
-                </div>
-                    
-            }
-                    
+
+                }
+            </div>
         </div>
 
     }

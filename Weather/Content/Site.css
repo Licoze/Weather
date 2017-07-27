@@ -48,3 +48,47 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+div.logo {
+    max-width: 200px;
+}
+div.header {
+    top: 0;
+    width: 100%;
+    position: fixed;
+    height: 50px;
+    background-color:#e4e4e4;
+    
+}
+.menu {
+    height: inherit;
+    list-style: none;
+    margin: 0; 
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+    padding-right: 50px;
+    align-items : center;
+}
+.menu  a {
+    font-size: 12pt;
+    font-weight: bold;
+    display: inline-block;
+    padding: 10px 5px;
+    
+}
+.flex-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: stretch;
+}
+
+.footer-element {
+    width: 50%;
+}
+.footer-element:first-child * {
+    float: left;
+}
+.footer-element:last-child * {
+    float: right;
+}
